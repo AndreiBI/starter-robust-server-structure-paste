@@ -1,23 +1,6 @@
 const pastes = require("../data/pastes-data");
 
-function list(req, res) {
-    const {userId} = req.params;
-    res.json({ data: pastes.filter(userId ? paste => paste.user_id === userId : () => true ) });
-}
-
 let lastPasteId = pastes.reduce((maxId, paste) => Math.max(maxId, paste.id), 0)
-
-function bodyDataHas(propertyName) {
-    return function (req, res, next) {
-        const { data = {} } = req.body;
-        if (data[propertyName]) {
-            return next();
-        }
-        next({
-            status: 400,
-            message: `Must include a ${propertyName}` });
-    };
-}
 
 function create(req, res) {
     const { data: { name, syntax, exposure, expiration, text, user_id } = {} } = req.body;
@@ -32,6 +15,23 @@ function create(req, res) {
     };
     pastes.push(newPaste);
     res.status(201).json({ data: newPaste });
+}
+
+function list(req, res) {
+    const {userId} = req.params;
+    res.json({ data: pastes.filter(userId ? paste => paste.user_id === userId : () => true ) });
+}
+
+function bodyDataHas(propertyName) {
+    return function (req, res, next) {
+        const { data = {} } = req.body;
+        if (data[propertyName]) {
+            return next();
+        }
+        next({
+            status: 400,
+            message: `Must include a ${propertyName}` });
+    };
 }
 
 function exposurePropertyIsValid(req, res, next) {
