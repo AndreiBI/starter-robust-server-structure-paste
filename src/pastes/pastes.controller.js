@@ -71,7 +71,7 @@ function expirationIsValidNumber(req, res, next) {
 
 function pasteExists(req, res, next) {
     const { pasteId } = req.params;
-    const foundPaste = pastes.find((paste) => paste.id === Number(pasteId));
+    const foundPaste = pastes.find(paste => paste.id === Number(pasteId));
     if (foundPaste) {
         res.locals.paste = foundPaste;
         return next();
@@ -80,10 +80,6 @@ function pasteExists(req, res, next) {
         status: 404,
         message: `Paste id not found: ${pasteId}`,
     });
-}
-
-function read(req, res, next) {
-    res.json({ data: res.locals.paste });
 }
 
 function update(req, res) {
@@ -98,7 +94,12 @@ function update(req, res) {
     paste.text = text;
 
     res.json({ data: paste });
+
 }
+
+function read(req, res, next) {
+    res.json({ data: res.locals.paste });
+};
 
 function destroy(req, res) {
     const { pasteId } = req.params;
