@@ -2,6 +2,10 @@ const express = require("express");
 const app = express();
 const pastes = require("./data/pastes-data");
 const pastesRouter = require("./pastes/pastes.router");
+const usersRouter = require("./users/users.router");
+
+app.use("/users", usersRouter);
+app.use("/pastes", pastesRouter);
 
 app.use(express.json());
 
